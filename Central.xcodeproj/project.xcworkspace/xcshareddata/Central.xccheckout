@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DA477B6C-59B2-4131-9614-BA2385D3C23E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Central</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>772D7827C70404EBA270C63B6E52E4A2C6DF886C</key>
+		<string>https://github.com/C4Framework/Central.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Central.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>772D7827C70404EBA270C63B6E52E4A2C6DF886C</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/C4Framework/Central.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>772D7827C70404EBA270C63B6E52E4A2C6DF886C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>772D7827C70404EBA270C63B6E52E4A2C6DF886C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Central</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -22,6 +22,8 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
     let interaction_service_uuid = CBUUID(string: "E8AA69DA-3D6F-4747-AC46-7CC750D26DFA")
     let notify_tap_uuid = CBUUID(string: "40A9CA6F-3862-4169-A715-FB3737D27134")
     let notify_tap_characteristic = CBMutableCharacteristic(type: CBUUID(string: "40A9CA6F-3862-4169-A715-FB3737D27134"), properties: .Read | .Notify, value: nil, permissions: .Readable)
+    let receive_tap_uuid = CBUUID(string: "D06202A0-A67B-49DF-AA13-DCC7240B10D2")
+    let receive_tap_characteristic = CBMutableCharacteristic(type: CBUUID(string: "D06202A0-A67B-49DF-AA13-DCC7240B10D2"), properties: .Write , value: nil, permissions: .Writeable)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +72,7 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
 
             if let services = discoveredPeripherals[identifier]?.services {
                 if let service = services[0] as? CBService {
+                    discoveredPeripherals[identifier]?.discoverCharacteristics([notify_tap_characteristic, receive_tap_characteristic], forService: service)
                 }
             } else {
                 discoveredPeripherals[identifier]?.discoverServices([interaction_service_uuid])
@@ -106,7 +109,7 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
             for s in p.services {
                 if let service = s as? CBService {
                     if service.UUID == interaction_service_uuid {
-                        peripheral.discoverCharacteristics([notify_tap_characteristic.UUID], forService: service)
+                        peripheral.discoverCharacteristics([notify_tap_characteristic.UUID, receive_tap_characteristic.UUID], forService: service)
                     }
                 }
             }
@@ -124,7 +127,15 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
                 if characteristic.UUID == notify_tap_characteristic.UUID {
                     currentConnectedPeripheral = connectedPeripherals[peripheral.identifier]
                     currentConnectedPeripheral?.setNotifyValue(true, forCharacteristic: characteristic)
-                    println("setNotify")
+                    println("setNotify - notify")
+                }
+
+                if characteristic.UUID == receive_tap_characteristic.UUID {
+                    currentConnectedPeripheral = connectedPeripherals[peripheral.identifier]
+                    currentConnectedPeripheral?.setNotifyValue(true, forCharacteristic: characteristic)
+                    let s = "hi"
+                    let d = s.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                    println("setNotify - receive")
                 }
             }
         }
@@ -134,7 +145,26 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
         println("updated value for \(characteristic)")
         if let d = characteristic.value() {
             let s = NSString(data: d, encoding: NSUTF8StringEncoding)
-            println(s)
+
+            println(connectedPeripherals.count)
+            for (identifier : NSUUID,p : CBPeripheral) in connectedPeripherals {
+                println("\(identifier.UUIDString) | \(peripheral.identifier.UUIDString)")
+                if identifier != peripheral.identifier {
+                    if let ss = p.services as? [CBService] {
+                        for service in ss {
+                            if service.UUID == interaction_service_uuid {
+                                if let cs = service.characteristics as? [CBCharacteristic] {
+                                    for chr in cs {
+                                        if chr.UUID == receive_tap_uuid {
+                                            p.writeValue(d, forCharacteristic: chr, type: CBCharacteristicWriteType.WithoutResponse)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -149,5 +179,7 @@ class ViewController: NSViewController, CBCentralManagerDelegate, CBPeripheralDe
     func peripheral(peripheral: CBPeripheral!, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
         println("did update notification state for \(characteristic)")
     }
+
+
 }
 
